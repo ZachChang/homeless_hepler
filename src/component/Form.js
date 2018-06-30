@@ -62,8 +62,6 @@ class Form extends React.Component {
     const { activeStep } = this.state;
     this.setState({
       activeStep: activeStep + 1,
-    },function() {
-        console.log(fieldValues);
     });
   };
 

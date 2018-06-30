@@ -3,6 +3,11 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Hidden from '@material-ui/core/Hidden';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+
 import { Link as Rlink} from 'react-router-dom';
 
 class Confirm extends React.Component {
@@ -10,16 +15,29 @@ class Confirm extends React.Component {
 		super(props);
 		this.state = {
 		  confirmStatus: false,
+		  open: false
 		};
-
-		this.handleInputChange = this.handleInputChange.bind(this);
+		this.handleCheck = this.handleCheck.bind(this);
+		this.handleClose = this.handleClose.bind(this);
+		this.nextStep = this.nextStep.bind(this);
 	}
 
-	handleInputChange(event) {
-		this.setState({
-
-		});
+	handleCheck(event) {
+		this.setState({ confirmStatus: !this.state.confirmStatus});
 	}
+
+	nextStep(event) {
+		event.preventDefault();
+		if (this.state.confirmStatus === false) {
+			this.setState({open:true});
+			} else {
+				this.props.handleNext();
+		}
+	}
+
+	handleClose = () => {
+		this.setState({ open: false });
+	};
 
 	render () {
 		return (
@@ -103,7 +121,7 @@ class Confirm extends React.Component {
 						</Grid>
 					</Grid>
 					<div className='confirm-term'>
-						<input type="checkbox"/>
+						<input type="checkbox" onClick={this.handleCheck}/>
 						<h1>同意條款</h1>
 					</div>
 		           </div>
@@ -129,6 +147,24 @@ class Confirm extends React.Component {
 				      <i className="fas fa-arrow-right"></i></Button>
 				  </div>
 				</Grid>
+				{/*輸入檢查訊息 */}
+		        <Dialog
+		          open={this.state.open}
+		          onClose={this.handleClose}
+		          aria-labelledby="alert-dialog-title"
+		          aria-describedby="alert-dialog-description"
+		        >
+		          <DialogContent>
+		            <DialogContentText id="alert-dialog-description">
+		            	請勾選同意條款
+		            </DialogContentText>
+		          </DialogContent>
+		          <DialogActions>
+		            <Button onClick={this.handleClose} color="primary" autoFocus>
+		              Ok
+		            </Button>
+		          </DialogActions>
+		        </Dialog>
 			</div>
 		);
 	}
